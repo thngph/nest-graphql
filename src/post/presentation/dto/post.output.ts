@@ -15,9 +15,6 @@ export class PostOutput {
   @HideField()
   authorId: number;
 
-  @Field(
-    () => require('../../../user/presentation/dto/user.output').UserOutput,
-    { nullable: true },
-  )
+  @Field(() => UserOutput, { nullable: true })
   author?: typeof UserOutput | null;
 }

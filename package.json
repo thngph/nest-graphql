@@ -12,8 +12,10 @@
     "dev": "nest start --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "copy:examples": "chmod +x scripts/copy-examples.sh && ./scripts/copy-examples.sh",
     "db:push": "prisma db push",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:setup": "prisma generate && prisma db push && prisma db seed"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",

@@ -1,11 +1,13 @@
+name: ngql
+
 services:
 
   postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: ngql-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: db
     ports:
-      - "5432:5432"
+      - 5432:5432

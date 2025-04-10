@@ -6,12 +6,16 @@
 
 ### Setup
 
-Setup data sample:
+Setup env
 
 ```bash
-yarn db:push
+yarn copy:examples
+```
 
-yarn db:seed
+Setup database with data sample:
+
+```bash
+yarn db:setup
 ```
 
 ### Start the Server
@@ -29,8 +33,14 @@ The API will be available at http://localhost:3000/graphql.
 You can test the GraphQL API using the built-in GraphQL Playground at http://localhost:3000/graphql. Example query with variables:
 
 ```graphql
-query GetUser($userId: Int!) {
-  user(id: $userId) {
+mutation {
+  login(input: { email: "alice@example.com", password: "password123" }) {
+    access_token
+  }
+}
+
+query {
+  user(id: 1) {
     id
     name
     email

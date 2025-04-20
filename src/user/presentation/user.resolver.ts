@@ -18,15 +18,15 @@ export class UserResolver {
   @Query(() => UserOutput, { nullable: true })
   @UseGuards(GqlAuthGuard)
   async user(@Args('id') id: number): Promise<UserOutput | null> {
-    const user = await this.userService.getUserById(id);
-    if (!user) return null;
-    return toUserOutput(user);
+    return this.userService
+      .getById(id)
+      .then((user) => user && toUserOutput(user));
   }
 
   @ResolveField(() => [PostOutput], { nullable: true })
   async posts(@Parent() user: UserOutput): Promise<PostOutput[]> {
-    return (await this.postService.getPostsByAuthorId(user.id)).map((post) =>
-      toPostOutput(post),
-    );
+    return this.postService
+      .getAllByAuthorId(user.id)
+      .then((posts) => posts.map(toPostOutput));
   }
 }

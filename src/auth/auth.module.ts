@@ -1,4 +1,3 @@
-// src/auth/auth.module.ts
 import { Module } from '@nestjs/common';
 import { SharedModule } from '../shared.module';
 import { UserModule } from '../user/user.module';

@@ -1,4 +1,3 @@
-// src/shared.module.ts
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { GqlAuthGuard } from './auth/presentation/auth.guard';

@@ -17,26 +17,19 @@ export class PostResolver {
   @Query(() => PostOutput, { nullable: true })
   @UseGuards(GqlAuthGuard)
   async post(@Args('id') id: number): Promise<PostOutput | null> {
-    const post = await this.postService.getPostById(id);
-    if (!post) return null;
-    return toPostOutput(post);
+    return this.postService.getById(id).then((post) => toPostOutput(post));
   }
 
   @Query(() => [PostOutput], { nullable: true })
   @UseGuards(GqlAuthGuard)
   async posts(@Args('authorId') authorId: number): Promise<PostOutput[]> {
-    const posts = await this.postService.getPostsByAuthorId(authorId);
-    return posts.map(toPostOutput);
+    return this.postService
+      .getAllByAuthorId(authorId)
+      .then((posts) => posts.map(toPostOutput));
   }
 
   @ResolveField(() => UserOutput)
   async author(@Parent() post: PostOutput): Promise<UserOutput | null> {
-    const author = await this.userService.getUserById(post.authorId);
-    if (!author) return null;
-    return {
-      id: author.id,
-      name: author.name,
-      email: author.email,
-    };
+    return this.userService.getById(post.authorId);
   }
 }

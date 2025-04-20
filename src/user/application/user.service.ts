@@ -9,7 +9,7 @@ export class UserService {
     @Inject('UserRepository') private readonly userRepository: UserRepository,
   ) {}
 
-  async createUser(data: {
+  async create(data: {
     name: string;
     email: string;
     password: string;
@@ -22,29 +22,28 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async getUserById(id: number): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     return this.userRepository.findById(id);
+  }
+
+  async getById(id: number): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new BadRequestException('User not found');
+    return user;
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findByEmail(email);
   }
 
-  async updateUser(
-    id: number,
-    data: { name?: string; email?: string },
-  ): Promise<User> {
-    const user = await this.userRepository.findById(id);
-    if (!user) throw new BadRequestException('User not found');
+  async update(id: number, data: { name?: string }): Promise<User> {
+    const user = await this.getById(id);
+    const newUser: Partial<Omit<User, 'password'>> = { ...user, ...data };
 
-    const updatedData: Partial<Omit<User, 'password'>> = { ...user };
-
-    return this.userRepository.update(id, updatedData);
+    return this.userRepository.update(id, newUser);
   }
 
   async deleteUser(id: number): Promise<void> {
-    const user = await this.userRepository.findById(id);
-    if (!user) throw new BadRequestException('User not found');
-    return this.userRepository.delete(id);
+    return this.getById(id).then(() => this.userRepository.delete(id));
   }
 }
